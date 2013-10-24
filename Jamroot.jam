@@ -1,0 +1,21 @@
+#    : requirements <cflags>"-Werror -Wall -Wextra -Wno-long-long -Wno-non-virtual-dtor -std=c++11 -pedantic -pedantic-errors"
+
+using gcc ;
+
+project jsoneasy
+	: build-dir .build
+	: requirements
+		<cflags>"-std=c++11 -Wextra"
+		<warnings-as-errors>on
+		<warnings>all
+		<debug-symbols>off
+		<variant>release
+		<optimization>speed
+		<inlining>full
+		<include>.
+	: build-dir .build
+;
+
+build-project curleasy ;
+
+build-project test ;
