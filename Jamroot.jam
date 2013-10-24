@@ -2,7 +2,7 @@
 
 using gcc ;
 
-project jsoneasy
+project curleasy
 	: build-dir .build
 	: requirements
 		<cflags>"-std=c++11 -Wextra"
@@ -18,4 +18,4 @@ project jsoneasy
 
 build-project curleasy ;
 
-# build-project test ;
+build-project test ;

@@ -1,0 +1,14 @@
+import testing ;
+
+lib ut : : <name>boost_unit_test_framework : <link>static ;
+
+alias cu : ..//curleasy/<link>static ;
+alias fortest : cu ut ;
+
+for v in [ glob *.cpp exclude-pattern network.cpp ] {
+	unit-test $(v)_test : $(v) fortest ;
+}
+
+exe network_test : network.cpp fortest ;
+
+#: <testing.launcher>gdb
