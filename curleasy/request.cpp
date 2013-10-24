@@ -19,7 +19,7 @@ public:
 		checkResult (curl_global_init(CURL_GLOBAL_DEFAULT));
 	}
 
-	GlobalContext() {
+	~GlobalContext() {
 		curl_global_cleanup();
 	}
 

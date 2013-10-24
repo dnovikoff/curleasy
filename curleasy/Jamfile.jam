@@ -1,0 +1,3 @@
+lib curl : : <name>curl : <link>static ;
+
+lib curleasy : curl [ glob *.cpp ] : <link>static ;

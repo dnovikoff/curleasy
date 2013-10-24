@@ -18,4 +18,4 @@ project jsoneasy
 
 build-project curleasy ;
 
-build-project test ;
+# build-project test ;
