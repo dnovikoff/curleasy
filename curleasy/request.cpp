@@ -38,39 +38,32 @@ public:
 } // namespace
 
 
-void Request::freeConextIfInitialized() {
-	if (curlContext != NULL) {
-		curl_easy_cleanup(curlContext);
-	}
-}
-
-Request::Request(const std::string& url):curlContext(NULL), url(url) {
-	buffer.reserve(DEFAULT_INITIAL_BUFFER_SIZE);
+Request::Request():curlContext(globalContext.newCurl()) {
+	init();
 }
 
 void Request::init() {
-	freeConextIfInitialized();
-	curlContext = globalContext.newCurl();
+	buffer.reserve(DEFAULT_INITIAL_BUFFER_SIZE);
 
-	curl_easy_setopt(curlContext, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(curlContext, CURLOPT_SSL_VERIFYPEER, 0L);
 	curl_easy_setopt(curlContext, CURLOPT_SSL_VERIFYHOST, 0L);
 	curl_easy_setopt(curlContext, CURLOPT_FOLLOWLOCATION, 1L);
+
 	curl_easy_setopt(curlContext, CURLOPT_WRITEFUNCTION, curlWriteCallback);
 	curl_easy_setopt(curlContext, CURLOPT_WRITEDATA, this);
 }
 
-void Request::perform() {
-	checkResult (curl_easy_perform(curlContext));
-}
+const std::string& Request::getContent(const std::string& url) {
+	buffer.clear();
+	curl_easy_setopt(curlContext, CURLOPT_URL, url.c_str());
 
-void Request::initAndPerform() {
-	init();
-	perform();
+	checkResult (curl_easy_perform(curlContext));
+
+	return buffer;
 }
 
 Request::~Request() {
-	freeConextIfInitialized();
+	curl_easy_cleanup(curlContext);
 }
 
 size_t Request::curlWriteCallback(char* data, size_t symbolSize, size_t symbolCount, void* t) {
@@ -86,10 +79,6 @@ size_t Request::curlWriteCallback(char* data, size_t symbolSize, size_t symbolCo
 
 void Request::appendData(char* data, size_t size) {
 	buffer.append(data, size);
-}
-
-const std::string& Request::toString() const {
-	return buffer;
 }
 
 } // namespace CurlEasy

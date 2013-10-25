@@ -8,13 +8,17 @@
 #include <curleasy/request.hpp>
 #include <curleasy/exception.hpp>
 
+		using namespace CurlEasy;
+
 class TestHelper {
+	const std::string getContent(const std::string& url) {
+		Request r;
+		return r.getContent(url);
+	}
 public:
 	bool checkExc(const std::string& url, const std::string& expectedErrorMessage) {
-		using namespace CurlEasy;
-		Request r(url);
 		try {
-			r.initAndPerform();
+			getContent(url);
 		} catch(const Exception& e) {
 			if (expectedErrorMessage == e.what()) return true;
 			std::cout << "Expected error message: " << expectedErrorMessage << std::endl;
@@ -27,9 +31,7 @@ public:
 
 	bool checkContentContains(const std::string& url, const std::string& expectedContent) {
 		using namespace CurlEasy;
-		Request r(url);
-		r.initAndPerform();
-		const std::string& receivedContent = r.toString();
+		const std::string& receivedContent = getContent(url);
 		if (receivedContent.find(expectedContent) != std::string::npos) return true;
 		std::cout << "Expected content: " << expectedContent << std::endl;
 		std::cout << "Received content: " << receivedContent << std::endl;
@@ -45,6 +47,11 @@ BOOST_AUTO_TEST_CASE ( unknownTest ) {
 BOOST_AUTO_TEST_CASE ( knonwHost ) {
 	TestHelper th;
 	BOOST_CHECK( th.checkContentContains("http://example.com", "<title>Example Domain</title>") );
+}
+
+BOOST_AUTO_TEST_CASE ( unknownPageOnKnownHost ) {
+	TestHelper th;
+	BOOST_CHECK( th.checkContentContains("http://example1.com/unknownpage", "TODO") );
 }
 
 
