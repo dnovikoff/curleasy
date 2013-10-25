@@ -28,8 +28,8 @@ public:
 	bool checkContentContains(const std::string& url, const std::string& expectedContent) {
 		using namespace CurlEasy;
 		Request r(url);
-		std::string receivedContent = "blalba";
 		r.initAndPerform();
+		const std::string& receivedContent = r.toString();
 		if (receivedContent.find(expectedContent) != std::string::npos) return true;
 		std::cout << "Expected content: " << expectedContent << std::endl;
 		std::cout << "Received content: " << receivedContent << std::endl;

@@ -8,7 +8,7 @@ project curleasy
 		<cflags>"-std=c++11 -Wextra"
 		<warnings-as-errors>on
 		<warnings>all
-		<debug-symbols>off
+		<debug-symbols>on
 		<variant>release
 		<optimization>speed
 		<inlining>full
