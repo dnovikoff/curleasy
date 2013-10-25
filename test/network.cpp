@@ -24,11 +24,27 @@ public:
 		std::cout << "No Exception caught" << std::endl;
 		return false;
 	}
+
+	bool checkContentContains(const std::string& url, const std::string& expectedContent) {
+		using namespace CurlEasy;
+		Request r(url);
+		std::string receivedContent = "blalba";
+		r.initAndPerform();
+		if (receivedContent.find(expectedContent) != std::string::npos) return true;
+		std::cout << "Expected content: " << expectedContent << std::endl;
+		std::cout << "Received content: " << receivedContent << std::endl;
+		return false;
+	}
 };
 
 BOOST_AUTO_TEST_CASE ( unknownTest ) {
 	TestHelper th;
 	BOOST_CHECK( th.checkExc("unknownurl", "Couldn't resolve host name") );
+}
+
+BOOST_AUTO_TEST_CASE ( knonwHost ) {
+	TestHelper th;
+	BOOST_CHECK( th.checkContentContains("http://example.com", "some") );
 }
 
 

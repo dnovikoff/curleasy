@@ -10,7 +10,6 @@ public:
 	explicit Exception(const std::string& message):std::runtime_error(message) {}
 };
 
-
 } // namespace CurlEasy
 
 #endif /* EXCEPTION_HPP_ */

@@ -9,6 +9,7 @@ for v in [ glob *.cpp exclude-pattern network.cpp ] {
 	unit-test $(v)_test : $(v) fortest ;
 }
 
-exe network_test : network.cpp fortest ;
+exe tests : network.cpp fortest ;
+
 
 #: <testing.launcher>gdb
