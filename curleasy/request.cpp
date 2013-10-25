@@ -78,7 +78,6 @@ size_t Request::curlWriteCallback(char* data, size_t symbolSize, size_t symbolCo
 	assert( symbolSize != 0 );
 	assert( data != NULL );
 
-	std::cout << "Test " << symbolSize << "*" << symbolCount << std::endl;
 	Request* ths = reinterpret_cast<Request*>(t);
 	const size_t size = symbolSize*symbolCount;
 	ths->appendData(data, size);

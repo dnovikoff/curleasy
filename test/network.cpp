@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE ( unknownTest ) {
 
 BOOST_AUTO_TEST_CASE ( knonwHost ) {
 	TestHelper th;
-	BOOST_CHECK( th.checkContentContains("http://example.com", "some") );
+	BOOST_CHECK( th.checkContentContains("http://example.com", "<title>Example Domain</title>") );
 }
 
 
