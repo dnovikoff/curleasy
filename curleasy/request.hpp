@@ -1,22 +1,29 @@
 #ifndef REQUEST_HPP_
 #define REQUEST_HPP_
 
-#include <curl/curl.h>
 #include <string>
 
 namespace CurlEasy {
 class Result;
 
 class Request {
+	friend class RequestConfigurator;
 	enum { DEFAULT_INITIAL_BUFFER_SIZE = 1024 };
 public:
 	Request();
 
 	Result requestUrl(const std::string& url);
 
-	~Request();
+	virtual ~Request();
+protected:
+	void setUserAgent(const std::string& userAgent);
+	void disableVerifySSL();
+	void acceptAllEncodings();
+	void enableAutoReferer();
+	void enableAutoCookies();
 private:
 	void init();
+	virtual void configure() = 0;
 	static size_t curlWriteCallback(char* data, size_t symbolSize, size_t symbolCount, void* ths);
 	void appendData(char* data, size_t size);
 
@@ -25,6 +32,7 @@ private:
 	Request& operator=(const Request&) = delete;
 
 	void * const curlContext;
+	bool initialized;
 	std::string buffer;
 };
 

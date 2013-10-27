@@ -9,4 +9,10 @@ Result::Result(Result&& other):returnCode(other.returnCode) {
 	content.swap(other.content);
 }
 
+Result& Result::operator=(Result&& other) {
+	returnCode = other.returnCode;
+	content.swap(other.content);
+	return *this;
+}
+
 } // namespace CurlEasy

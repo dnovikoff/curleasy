@@ -11,9 +11,18 @@
 
 using namespace CurlEasy;
 
+class TestRequest: public Request {
+	void configure() override {
+		disableVerifySSL();
+		setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0");
+		acceptAllEncodings();
+		enableAutoCookies();
+	}
+};
+
 class TestHelper {
 	Result getResult(const std::string& url) {
-		Request r;
+		TestRequest r;
 		return r.requestUrl(url);
 	}
 	const std::string getContent(const std::string& url) {
@@ -74,5 +83,3 @@ BOOST_AUTO_TEST_CASE ( unknownPageOnKnownHost ) {
 	TestHelper th;
 	BOOST_CHECK( th.checkCode("http://example1.com/unknownpage", Result::NOT_FOUND_CODE) );
 }
-
-

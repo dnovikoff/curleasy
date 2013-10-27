@@ -19,6 +19,7 @@ public:
 
 	Result(int code, const std::string& data);
 	Result(Result&& other);
+	Result& operator=(Result&& other);
 	const std::string& getData() const {
 		return content;
 	}
