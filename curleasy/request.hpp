@@ -5,13 +5,14 @@
 #include <string>
 
 namespace CurlEasy {
+class Result;
 
 class Request {
 	enum { DEFAULT_INITIAL_BUFFER_SIZE = 1024 };
 public:
 	Request();
 
-	const std::string& getContent(const std::string& url);
+	Result requestUrl(const std::string& url);
 
 	~Request();
 private:

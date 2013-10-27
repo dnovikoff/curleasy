@@ -3,6 +3,7 @@
 
 #include "request.hpp"
 #include "exception.hpp"
+#include "result.hpp"
 
 namespace CurlEasy {
 
@@ -53,13 +54,15 @@ void Request::init() {
 	curl_easy_setopt(curlContext, CURLOPT_WRITEDATA, this);
 }
 
-const std::string& Request::getContent(const std::string& url) {
+Result Request::requestUrl(const std::string& url) {
 	buffer.clear();
 	curl_easy_setopt(curlContext, CURLOPT_URL, url.c_str());
 
 	checkResult (curl_easy_perform(curlContext));
+	long respCode = 0;
+	checkResult (curl_easy_getinfo(curlContext, CURLINFO_RESPONSE_CODE, &respCode));
 
-	return buffer;
+	return Result( static_cast<int>(respCode), buffer);
 }
 
 Request::~Request() {

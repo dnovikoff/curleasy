@@ -7,13 +7,17 @@
 
 #include <curleasy/request.hpp>
 #include <curleasy/exception.hpp>
+#include <curleasy/result.hpp>
 
-		using namespace CurlEasy;
+using namespace CurlEasy;
 
 class TestHelper {
-	const std::string getContent(const std::string& url) {
+	Result getResult(const std::string& url) {
 		Request r;
-		return r.getContent(url);
+		return r.requestUrl(url);
+	}
+	const std::string getContent(const std::string& url) {
+		return getResult(url).getData();
 	}
 public:
 	bool checkExc(const std::string& url, const std::string& expectedErrorMessage) {
@@ -29,13 +33,30 @@ public:
 		return false;
 	}
 
-	bool checkContentContains(const std::string& url, const std::string& expectedContent) {
+	bool checkContentContains(const std::string& url, const std::string& expectedContent, int expectedCode = Result::OK_CODE) {
 		using namespace CurlEasy;
+		Result result(getResult(url));
+		if (expectedCode != result.getCode()) {
+			std::cout << "Expected code: " << expectedCode << std::endl;
+			std::cout << "Received code: " << result.getCode() << std::endl;
+			return false;
+		}
 		const std::string& receivedContent = getContent(url);
 		if (receivedContent.find(expectedContent) != std::string::npos) return true;
 		std::cout << "Expected content: " << expectedContent << std::endl;
 		std::cout << "Received content: " << receivedContent << std::endl;
 		return false;
+	}
+
+	bool checkCode(const std::string& url, int expectedCode) {
+		using namespace CurlEasy;
+		Result result(getResult(url));
+		if (expectedCode != result.getCode()) {
+			std::cout << "Expected code: " << expectedCode << std::endl;
+			std::cout << "Received code: " << result.getCode() << std::endl;
+			return false;
+		}
+		return true;
 	}
 };
 
@@ -51,7 +72,7 @@ BOOST_AUTO_TEST_CASE ( knonwHost ) {
 
 BOOST_AUTO_TEST_CASE ( unknownPageOnKnownHost ) {
 	TestHelper th;
-	BOOST_CHECK( th.checkContentContains("http://example1.com/unknownpage", "TODO") );
+	BOOST_CHECK( th.checkCode("http://example1.com/unknownpage", Result::NOT_FOUND_CODE) );
 }
 
 
