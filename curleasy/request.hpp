@@ -21,6 +21,7 @@ protected:
 	void acceptAllEncodings();
 	void enableAutoReferer();
 	void enableAutoCookies();
+	void setTimeoutSeconds(size_t seconds);
 private:
 	void init();
 	virtual void configure() = 0;

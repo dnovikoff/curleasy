@@ -19,6 +19,27 @@ inline void checkResult(CURLcode code) {
 
 #define setOpt(KEY, VALUE) checkResult (curl_easy_setopt(curlContext, KEY, VALUE))
 
+static void setInteger_(CURL* curlContext, CURLoption option, long value) {
+	setOpt(option, value);
+}
+
+void setBoolean_(CURL* curlContext, CURLoption option, bool value) {
+	setInteger_(curlContext, option, value);
+}
+
+void setString_(CURL* curlContext, CURLoption option, const char * value) {
+	setOpt(option, value);
+}
+
+template<typename T>
+void setInteger_(CURL* curlContext, CURLoption option, T value) {
+	setInteger_(curlContext, option, static_cast<int>(value));
+}
+
+#define setInteger(KEY, VALUE) setInteger_(curlContext, KEY, VALUE)
+#define setBoolean(KEY, VALUE) setBoolean_(curlContext, KEY, VALUE)
+#define setString(KEY, VALUE) setString_(curlContext, KEY, VALUE)
+
 class GlobalContext {
 	GlobalContext(const GlobalContext&) = delete;
 	GlobalContext& operator=(const GlobalContext&) = delete;
@@ -47,24 +68,28 @@ Request::Request():curlContext(globalContext.newCurl()),initialized(false) {
 }
 
 void Request::setUserAgent(const std::string& userAgent) {
-	setOpt(CURLOPT_USERAGENT, userAgent.c_str());
+	setString(CURLOPT_USERAGENT, userAgent.c_str());
 }
 
 void Request::disableVerifySSL() {
-	setOpt(CURLOPT_SSL_VERIFYPEER, 0L);
-	setOpt(CURLOPT_SSL_VERIFYHOST, 0L);
+	setBoolean(CURLOPT_SSL_VERIFYPEER, false);
+	setBoolean(CURLOPT_SSL_VERIFYHOST, false);
 }
 
 void Request::acceptAllEncodings() {
-	setOpt(CURLOPT_ENCODING, "");
+	setString(CURLOPT_ACCEPT_ENCODING, "");
 }
 
 void Request::enableAutoReferer() {
-	setOpt(CURLOPT_AUTOREFERER, 1L);
+	setBoolean(CURLOPT_AUTOREFERER, true);
 }
 
 void Request::enableAutoCookies() {
-	setOpt(CURLOPT_COOKIELIST, "");
+	setString(CURLOPT_COOKIELIST, "");
+}
+
+void Request::setTimeoutSeconds(size_t seconds) {
+	setInteger(CURLOPT_TIMEOUT, seconds);
 }
 
 void Request::init() {
@@ -72,7 +97,7 @@ void Request::init() {
 
 	configure();
 
-	setOpt(CURLOPT_FOLLOWLOCATION, 1L);
+	setBoolean(CURLOPT_FOLLOWLOCATION, true);
 
 	setOpt(CURLOPT_WRITEFUNCTION, curlWriteCallback);
 	setOpt(CURLOPT_WRITEDATA, this);
