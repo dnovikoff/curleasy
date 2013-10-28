@@ -1,5 +1,5 @@
-#ifndef REQUEST_HPP_
-#define REQUEST_HPP_
+#ifndef CURLEASY_REQUEST_HPP_
+#define CURLEASY_REQUEST_HPP_
 
 #include <curl/curl.h>
 #include <string>
@@ -29,4 +29,4 @@ private:
 
 } // namespace CurlEasy
 
-#endif /* REQUEST_HPP_ */
+#endif // CURLEASY_REQUEST_HPP_

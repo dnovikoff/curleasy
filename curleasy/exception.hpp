@@ -1,5 +1,5 @@
-#ifndef EXCEPTION_HPP_
-#define EXCEPTION_HPP_
+#ifndef CURLEASY_EXCEPTION_HPP_
+#define CURLEASY_EXCEPTION_HPP_
 
 #include <stdexcept>
 
@@ -12,4 +12,4 @@ public:
 
 } // namespace CurlEasy
 
-#endif /* EXCEPTION_HPP_ */
+#endif // CURLEASY_EXCEPTION_HPP_
