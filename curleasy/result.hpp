@@ -1,5 +1,5 @@
-#ifndef RESULT_HPP_
-#define RESULT_HPP_
+#ifndef CURLEASY_RESULT_HPP_
+#define CURLEASY_RESULT_HPP_
 
 #include <string>
 
@@ -33,4 +33,4 @@ public:
 
 } // namespace CurlEasy
 
-#endif /* RESULT_HPP_ */
+#endif // CURLEASY_RESULT_HPP_
